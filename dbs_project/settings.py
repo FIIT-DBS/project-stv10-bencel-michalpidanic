@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'dbs2021',
         'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
         'USER': 'xpidanic@fiit-dbs-xpidanic-db',
-        'PASSWORD': '6DvXGhy0Y0',
+        'PASSWORD': os.environ.get('DBPASS'),
         'PORT': '5432'
     }
     # localhost
