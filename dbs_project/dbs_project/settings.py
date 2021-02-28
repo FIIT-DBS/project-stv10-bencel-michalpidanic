@@ -37,11 +37,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'qo%%k7z(ba(-@cz$sinsux)87l1eq2$+qn&2$@a!*=v4oc&@gt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-PRE_BUILD_COMMAND = 'pip install -r requirements.txt'
-
-POST_BUILD_COMMAND = 'pip install -r requirements.txt'
+DEBUG = True
 
 ALLOWED_HOSTS = ['fiit-dbs-xpidanic-app.azurewebsites.net']
 
