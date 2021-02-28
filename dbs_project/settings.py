@@ -37,11 +37,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'qo%%k7z(ba(-@cz$sinsux)87l1eq2$+qn&2$@a!*=v4oc&@gt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-PRE_BUILD_COMMAND = 'pip install -r requirements.txt'
-
-POST_BUILD_COMMAND = 'pip install -r requirements.txt'
+DEBUG = True
 
 ALLOWED_HOSTS = ['fiit-dbs-xpidanic-app.azurewebsites.net']
 
@@ -99,6 +95,7 @@ DATABASES = {
         'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
         'USER': 'xpidanic@fiit-dbs-xpidanic-db',
         'PASSWORD': '6DvXGhy0Y0',
+        'PORT': '5432'
     }
     # localhost
     # 'default': {
