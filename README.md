@@ -1,0 +1,1 @@
+https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
