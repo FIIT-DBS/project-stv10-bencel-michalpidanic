@@ -91,7 +91,7 @@ DATABASES = {
     # production
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dbs2021',
+        'NAME': os.environ.get('DBNAME'),
         'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
         'USER': 'xpidanic@fiit-dbs-xpidanic-db',
         'PASSWORD': os.environ.get('DBPASS'),
