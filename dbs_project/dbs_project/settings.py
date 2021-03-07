@@ -95,6 +95,7 @@ DATABASES = {
         'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
         'USER': 'postgres@fiit-dbs-xpidanic-db',
         'PASSWORD': os.environ.get('DBPASS'),
+        'PORT': '5432'
     }
     # localhost
     # 'default': {
