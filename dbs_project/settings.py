@@ -18,16 +18,16 @@ import json
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 # # getting sensitive data such as passwords from secrets.json
-with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
-    secrets = json.load(secrets_file)
+# with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
+#     secrets = json.load(secrets_file)
 
 
-def get_secret(setting, secrets=secrets):
-    """Get secret setting or fail with ImproperlyConfigured"""
-    try:
-        return secrets[setting]
-    except KeyError:
-        raise ImproperlyConfigured("Set the {} setting".format(setting))
+# def get_secret(setting, secrets=secrets):
+#     """Get secret setting or fail with ImproperlyConfigured"""
+#     try:
+#         return secrets[setting]
+#     except KeyError:
+#         raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 
 # Quick-start development settings - unsuitable for production
@@ -88,24 +88,24 @@ WSGI_APPLICATION = 'dbs_project.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # # production
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'dbs2021',
-    #     'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
-    #     'USER': 'postgres@fiit-dbs-xpidanic-db',
-    #     'PASSWORD': os.environ.get('DBPASS'),
-    #     'PORT': '5432'
-    # }
-    # localhost
+    # production
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_secret('DB_NAME'),
-        'USER': get_secret('DB_USER'),
-        'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': get_secret('DB_HOST'),
+        'NAME': 'dbs2021',
+        'HOST': 'fiit-dbs-xpidanic-db.postgres.database.azure.com',
+        'USER': 'postgres@fiit-dbs-xpidanic-db',
+        'PASSWORD': os.environ.get('DBPASS'),
         'PORT': '5432'
     }
+    # # localhost
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': get_secret('DB_NAME'),
+    #     'USER': get_secret('DB_USER'),
+    #     'PASSWORD': get_secret('DB_PASSWORD'),
+    #     'HOST': get_secret('DB_HOST'),
+    #     'PORT': '5432'
+    # }
 }
 
 

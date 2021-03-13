@@ -8,15 +8,15 @@ import math
 
 
 class SubmissionsView(View):
+    def validate_date(self, date_str):
+        try:
+            datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            return True
+        except:
+            return False
+
     def get(self, request):
         query_params = {}
-
-        def validate_date(date_str):
-            try:
-                datetime.datetime.strptime(date_str, '%Y-%m-%d')
-                return True
-            except:
-                return False
 
         # getting query params and validating them - if not valid then default values
         page = int(request.GET.get('page', '1'))
@@ -36,12 +36,12 @@ class SubmissionsView(View):
 
         registration_date_gte = str(request.GET.get(
             'registration_date_gte', '1000-01-01'))[0:10]
-        query_params['registration_date_gte'] = registration_date_gte if validate_date(
+        query_params['registration_date_gte'] = registration_date_gte if self.validate_date(
             registration_date_gte) else '1000-01-01'
 
         registration_date_lte = request.GET.get(
             'registration_date_lte', '3000-01-01')
-        query_params['registration_date_lte'] = registration_date_lte if validate_date(
+        query_params['registration_date_lte'] = registration_date_lte if self.validate_date(
             registration_date_lte) else '3000-01-01'
 
         sql_query = '''
@@ -95,7 +95,66 @@ class SubmissionsView(View):
             ]})
 
     def post(self, request):
-        print('metoda pre post')
+        errors = []
+
+        def add_error(field, reasons):
+            errors.append(
+                {
+                    'field': field,
+                    'reasons': reasons
+                }
+            )
+
+        # getting data from request and validating them - if not valid then throw error
+        br_court_name = request.POST.get('br_court_name')
+        if not br_court_name:
+            add_error('br_court_name', 'required')
+
+        kind_name = request.POST.get('kind_name')
+        if not kind_name:
+            add_error('kind_name', 'required')
+
+        cin = request.POST.get('cin')
+        if not cin:
+            add_error('cin', 'required')
+        elif not cin.isnumeric():
+            add_error('cin', 'not_number')
+
+        registration_date = request.POST.get('registration_date')
+        if not registration_date:
+            add_error('registration_date', 'required')
+        elif not self.validate_date(registration_date):
+            add_error('registration_date', 'not_date')
+        elif registration_date[:4] != str(datetime.datetime.now().year):
+            add_error('registration_date', 'invalid_range')
+
+        corporate_body_name = request.POST.get('corporate_body_name')
+        if not corporate_body_name:
+            add_error('corporate_body_name', 'required')
+
+        br_section = request.POST.get('br_section')
+        if not br_section:
+            add_error('br_section', 'required')
+
+        br_insertion = request.POST.get('br_insertion')
+        if not br_insertion:
+            add_error('br_insertion', 'required')
+
+        street = request.POST.get('street')
+        if not street:
+            add_error('street', 'required')
+
+        postal_code = request.POST.get('postal_code')
+        if not postal_code:
+            add_error('postal_code', 'required')
+
+        city = request.POST.get('city')
+        if not city:
+            add_error('city', 'required')
+
+        # return response with all errors if some exists
+        if len(errors) > 0:
+            return JsonResponse({'errors': errors}, status=422)
 
     def delete(self, request):
         print('metoda pre delete')
