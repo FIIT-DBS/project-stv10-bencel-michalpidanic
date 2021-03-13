@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('v1/', include('dbs_apps.urls'))
+    path('v1/health/', include('apps.urls.uptimeUrl')),
+    path('v1/ov/submissions/', include('apps.urls.submissionsUrl'))
 ]
