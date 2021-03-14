@@ -1,6 +1,6 @@
 # DBS 2021
 
-Link na azure: https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
+Azure website: https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
 
 ## Run application
 - in settings.py in section DATABASES comment whole azure production part and uncomment development part
@@ -19,7 +19,7 @@ Link na azure: https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
     python3 manage.py runserver
 ```
 
-## Zadanie 1 - Uptime
+## Task 1 - Uptime
 - url: 
 ```
     /v1/health/
@@ -34,7 +34,7 @@ Link na azure: https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
     }
 ```
 
-## Zadanie 2 - Submissions
+## Task 2 - Submissions
 ### GET
 - url:
 ```
