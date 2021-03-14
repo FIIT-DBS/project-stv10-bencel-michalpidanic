@@ -123,8 +123,6 @@ class SubmissionsView(View):
         registration_date = request.POST.get('registration_date')
         if not registration_date:
             add_error('registration_date', 'required')
-        elif not self.validate_date(registration_date):
-            add_error('registration_date', 'not_date')
         elif registration_date[:4] != str(datetime.datetime.now().year):
             add_error('registration_date', 'invalid_range')
 
@@ -156,5 +154,146 @@ class SubmissionsView(View):
         if len(errors) > 0:
             return JsonResponse({'errors': errors}, status=422)
 
-    def delete(self, request):
-        print('metoda pre delete')
+        # getting last_number in current year from ov.bulletin_issues
+        with connection.cursor() as cursor:
+            last_number_query = '''
+                SELECT number
+                FROM ov.bulletin_issues
+                WHERE year = EXTRACT(YEAR FROM CURRENT_DATE)
+                ORDER BY number DESC
+                FETCH NEXT 1 ROWS ONLY;
+            '''
+            cursor.execute(last_number_query)
+            last_number = cursor.fetchone()[0]
+            number = last_number + 1 if last_number else 1
+
+        # inserting new row to bulletin_issues with number and returning its id
+        with connection.cursor() as cursor:
+            bulletin_issues_insert = '''
+                INSERT INTO ov.bulletin_issues (year, number, published_at, created_at, updated_at)
+                VALUES (EXTRACT(YEAR FROM CURRENT_DATE), {}, now(), now(), now());
+                SELECT currval(pg_get_serial_sequence('ov.bulletin_issues','id'));
+            '''.format(number)
+            cursor.execute(bulletin_issues_insert)
+            bulletin_issue_id = cursor.fetchone()[0]
+
+        # inserting new row to raw issues with bulletin_issue_id and returning its id
+        with connection.cursor() as cursor:
+            raw_issues_insert = '''
+                INSERT INTO ov.raw_issues (bulletin_issue_id, file_name, content, created_at, updated_at)
+                VALUES ({}, '-', '-', now(), now());
+                SELECT currval(pg_get_serial_sequence('ov.raw_issues','id'));
+            '''.format(bulletin_issue_id)
+            cursor.execute(raw_issues_insert)
+            raw_issue_id = cursor.fetchone()[0]
+
+        # inserting new to or_podanie_issues with bulletin_issue_id and raw_issue_id
+        with connection.cursor() as cursor:
+            or_podanie_issues_insert = '''
+                INSERT INTO ov.or_podanie_issues (
+                    bulletin_issue_id, 
+                    raw_issue_id, 
+                    br_mark, 
+                    br_court_code, 
+                    br_court_name, 
+                    kind_code, 
+                    kind_name, 
+                    cin, 
+                    registration_date, 
+                    corporate_body_name, 
+                    br_section, 
+                    br_insertion, 
+                    text,
+                    created_at,
+                    updated_at,
+                    address_line,
+                    street, 
+                    postal_code,
+                    city
+                )VALUES (
+                    {},
+                    {},
+                    '-',
+                    '-',
+                    '{}',
+                    '-',
+                    '{}',
+                    {},
+                    '{}',
+                    '{}',
+                    '{}',
+                    '{}',
+                    '-',
+                    now(),
+                    now(),
+                    '{}',
+                    '{}',
+                    '{}',
+                    '{}'
+                );
+                SELECT * 
+                FROM ov.or_podanie_issues
+                WHERE id = currval(pg_get_serial_sequence('ov.or_podanie_issues', 'id'));
+            '''.format(
+                int(bulletin_issue_id),
+                int(raw_issue_id),
+                br_court_name,
+                kind_name,
+                int(cin),
+                registration_date,
+                corporate_body_name,
+                br_section,
+                br_insertion,
+                street + ', ' + postal_code + ' ' + city,
+                street,
+                postal_code,
+                city
+            )
+
+            def dictfetchall(cursor):
+                columns = [col[0] for col in cursor.description]
+                return [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+
+            cursor.execute(or_podanie_issues_insert)
+            insertion_result = dictfetchall(cursor)
+
+        # return response with created submission
+        return JsonResponse({'created_submission': insertion_result},  status=201)
+
+    def delete(self, request, id):
+        # first selecting submission with passed id and getting its raw_issue_id and bulletin_issu_id
+        with connection.cursor() as cursor:
+            get_ids_query = '''
+                SELECT bulletin_issue_id, raw_issue_id
+                FROM ov.or_podanie_issues
+                WHERE id = {};
+            '''.format(id)
+
+            def dictfetchall(cursor):
+                columns = [col[0] for col in cursor.description]
+                return [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+
+            cursor.execute(get_ids_query)
+            ids = dictfetchall(cursor)
+
+        # if not found return 404
+        if not ids:
+            return HttpResponse(status=404)
+
+        # delete submission in all tables and return 204
+        with connection.cursor() as cursor:
+            delete_query = '''
+                DELETE FROM ov.or_podanie_issues WHERE id = {};
+                DELETE FROM ov.raw_issues WHERE id = {};
+                DELETE FROM ov.bulletin_issues WHERE id = {};
+            '''.format(id, ids[0].get('raw_issue_id'), ids[0].get('bulletin_issue_id'))
+
+            cursor.execute(delete_query)
+
+        return HttpResponse(status=204)
