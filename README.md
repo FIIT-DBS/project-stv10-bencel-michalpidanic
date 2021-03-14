@@ -1,6 +1,6 @@
 # DBS 2021
 
-Azure website: https://fiit-dbs-xpidanic-app.azurewebsites.net/v1/health/
+Azure website: https://fiit-dbs-xpidanic-app.azurewebsites.net/
 
 ## Run application
 - in settings.py in section DATABASES comment whole azure production part and uncomment development part
