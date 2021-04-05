@@ -91,10 +91,10 @@ DATABASES = {
     # azure production
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'slovensko',
-        'HOST': '147.175.150.216',
-        'USER': 'tester',
-        'PASSWORD': 'YRgYxeD4UVGp',
+        'NAME': 'dbs2021',
+        'HOST': 'dbs2021.cx8jluqebpzm.us-east-1.rds.amazonaws.com',
+        'USER': 'postgres',
+        'PASSWORD': '6DvXGhy0Y0',
         'PORT': '5432'
     }
     # # development
