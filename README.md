@@ -115,7 +115,8 @@ Azure website: https://fiit-dbs-xpidanic-app.azurewebsites.net/
             {
                 "field": "",
                 "reasons": ""
-            }
+            },
+            ...
         ]
     }
 ```
@@ -134,4 +135,57 @@ Azure website: https://fiit-dbs-xpidanic-app.azurewebsites.net/
 - error response:
 ```
     Status: 404 Not found
+```
+
+## Task 3 - Companies
+### GET
+- url:
+```
+    /v1/companies/
+```
+
+- query_params:
+```
+    page - default 1,
+    per_page - default 10,
+    query - default '',
+    last_update_lte - default '1000-01-01',
+    last_update_gte - default '3000-01-01',
+    order_by - default cin,
+    order_type - default DESC
+```
+
+- response:
+```
+    Status: 200 OK
+
+    {
+        "result": [
+            {
+                "metadata": {
+                    "page": num,
+                    "per_page": num,
+                    "pages": num,
+                    "total": num
+                }
+            },
+            {
+                "items": [
+                    {
+                        "cin": num,
+                        "name": "",
+                        "br_section": "",
+                        "address_line": "",
+                        "last_update": "",
+                        "or_podanie_issues_count": num,
+                        "znizenie_imania_issues_count": num,
+                        "likvidator_issues_count": num,
+                        "konkurz_vyrovnanie_issues_count": num,
+                        "konkurz_restrukturalizacia_actors_count": num
+                    },
+                    ...
+                ]
+            }
+        ]
+    }   
 ```
