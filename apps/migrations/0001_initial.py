@@ -146,6 +146,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(automatic_migration(), hints={
-                          'target_db': 'default'})
+        # migrations.RunSQL(automatic_migration(), hints={
+        #                   'target_db': 'default'})
     ]

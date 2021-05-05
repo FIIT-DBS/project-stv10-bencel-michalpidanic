@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('v1/health/', include('apps.urls.uptimeUrl')),
     path('v1/ov/submissions/', include('apps.urls.submissionsUrl')),
-    path('v1/companies/', include('apps.urls.companiesUrl'))
+    path('v1/companies/', include('apps.urls.companiesUrl')),
+    path('v2/ov/submissions/', include('apps.urls.submissionsUrlOrm'))
 ]
