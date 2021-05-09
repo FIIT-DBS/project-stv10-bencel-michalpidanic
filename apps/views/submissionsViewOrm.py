@@ -21,7 +21,11 @@ class SubmissionsViewOrm(View):
     def get(self, request, id=''):
         if id:
             # getting object from db
-            or_podanie_issues_get = OrPodanieIssues.objects.filter(id=id)[0]
+            try:
+                or_podanie_issues_get = OrPodanieIssues.objects.get(id=id)
+            except:
+                # if not found return 404
+                return JsonResponse({'error': {'message': 'Záznam neexistuje'}},  status=404)
 
             # serialize response
             response = {
@@ -224,11 +228,10 @@ class SubmissionsViewOrm(View):
 
     def delete(self, request, id):
         # first selecting submission with passed id and getting its raw_issue_id and bulletin_issu_id
-        ids = OrPodanieIssues.objects.filter(id=id).values(
-            'bulletin_issue_id', 'raw_issue_id')
-
-        # if not found return 404
-        if not ids:
+        try:
+            ids = OrPodanieIssues.objects.get(id=id)
+        except:
+            # if not found return 404
             return JsonResponse({'error': {'message': 'Záznam neexistuje'}},  status=404)
 
         # delete submission in all tables and return 204
