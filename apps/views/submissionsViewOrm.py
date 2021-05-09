@@ -235,8 +235,8 @@ class SubmissionsViewOrm(View):
             return JsonResponse({'error': {'message': 'Záznam neexistuje'}},  status=404)
 
         # delete submission in all tables and return 204
-        raw_issue_id = ids[0].get('raw_issue_id')
-        bulletin_issue_id = ids[0].get('bulletin_issue_id')
+        raw_issue_id = ids.get('raw_issue_id')
+        bulletin_issue_id = ids.get('bulletin_issue_id')
         OrPodanieIssues.objects.filter(id=id).delete()
         RawIssues.objects.filter(id=raw_issue_id).delete()
         BulletinIssues.objects.filter(id=bulletin_issue_id).delete()
