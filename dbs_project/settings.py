@@ -89,24 +89,25 @@ WSGI_APPLICATION = 'dbs_project.wsgi.application'
 
 DATABASES = {
     # azure production
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'dbs2021',
-    #     'HOST': 'dbs2021.cx8jluqebpzm.us-east-1.rds.amazonaws.com',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '6DvXGhy0Y0',
-    #     'PORT': '5432'
-    # }
-    # development
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_secret('DB_NAME'),
-        'USER': get_secret('DB_USER'),
-        'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': get_secret('DB_HOST'),
+        'NAME': 'dbs2021',
+        'HOST': 'dbs2021.cx8jluqebpzm.us-east-1.rds.amazonaws.com',
+        'USER': 'postgres',
+        'PASSWORD': '6DvXGhy0Y0',
         'PORT': '5432',
         'OPTIONS': {'options': '-c search_path=ov'}
     }
+    # # development
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': get_secret('DB_NAME'),
+    #     'USER': get_secret('DB_USER'),
+    #     'PASSWORD': get_secret('DB_PASSWORD'),
+    #     'HOST': get_secret('DB_HOST'),
+    #     'PORT': '5432',
+    #     'OPTIONS': {'options': '-c search_path=ov'}
+    # }
 }
 
 
@@ -140,7 +141,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

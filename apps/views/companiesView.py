@@ -39,8 +39,8 @@ class CompaniesView(View):
         query_params['last_update_gte'] = last_update_gte if self.validate_date(
             last_update_gte) else '1000-01-01'
 
-        last_update_lte = request.GET.get(
-            'last_update_lte', '3000-01-01')
+        last_update_lte = str(request.GET.get(
+            'last_update_lte', '3000-01-01'))[0:10]
         query_params['last_update_lte'] = last_update_lte if self.validate_date(
             last_update_lte) else '3000-01-01'
 

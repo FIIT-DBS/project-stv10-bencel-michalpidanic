@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import View
 from django.db import connection
+import json
 import datetime
 import math
 
@@ -106,47 +107,48 @@ class SubmissionsView(View):
             )
 
         # getting data from request and validating them - if not valid then throw error
-        br_court_name = request.POST.get('br_court_name')
+        br_court_name = json.loads(request.body).get('br_court_name')
         if not br_court_name:
             add_error('br_court_name', 'required')
 
-        kind_name = request.POST.get('kind_name')
+        kind_name = json.loads(request.body).get('kind_name')
         if not kind_name:
             add_error('kind_name', 'required')
 
-        cin = request.POST.get('cin')
+        cin = json.loads(request.body).get('cin')
         if not cin:
             add_error('cin', 'required')
         elif not cin.isnumeric():
             add_error('cin', 'not_number')
 
-        registration_date = request.POST.get('registration_date')
+        registration_date = json.loads(request.body).get('registration_date')
         if not registration_date:
             add_error('registration_date', 'required')
         elif registration_date[:4] != str(datetime.datetime.now().year):
             add_error('registration_date', 'invalid_range')
 
-        corporate_body_name = request.POST.get('corporate_body_name')
+        corporate_body_name = json.loads(
+            request.body).get('corporate_body_name')
         if not corporate_body_name:
             add_error('corporate_body_name', 'required')
 
-        br_section = request.POST.get('br_section')
+        br_section = json.loads(request.body).get('br_section')
         if not br_section:
             add_error('br_section', 'required')
 
-        br_insertion = request.POST.get('br_insertion')
+        br_insertion = json.loads(request.body).get('br_insertion')
         if not br_insertion:
             add_error('br_insertion', 'required')
 
-        street = request.POST.get('street')
+        street = json.loads(request.body).get('street')
         if not street:
             add_error('street', 'required')
 
-        postal_code = request.POST.get('postal_code')
+        postal_code = json.loads(request.body).get('postal_code')
         if not postal_code:
             add_error('postal_code', 'required')
 
-        city = request.POST.get('city')
+        city = json.loads(request.body).get('city')
         if not city:
             add_error('city', 'required')
 
